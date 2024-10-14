@@ -64,12 +64,12 @@ function GoodName({ index, data }: { index: number; data: any }) {
   ) : (
     <div>
         <div className="w-full">
-          <Carousel cols={4} row={1} gap={20} loop>
+          <Carousel cols={4} row={1} gap={50} loop>
             {Data.results.map((item: MovieData, index: number) => (
               <Carousel.Item key={index} className="flex items-center justify-center">
                 <Link to={`/movieDetails/${item.id}`} >
                   <div key={index}>
-                      <div >
+                      <div className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
                         <img src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt="MoviePoster" />
                         <h1><GoodName index={index} data={Data}/></h1>
                       </div>

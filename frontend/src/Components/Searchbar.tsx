@@ -62,7 +62,7 @@ function SearchBar() {
   };
 
   return (
-    <div className="relative w-full max-w-lg mx-auto mt-8 mb-7">
+    <div className="relative w-full max-w-lg mx-auto mt-8 mb-7 bg-transparent ">
       <div className="flex items-center gap-4 bg-white rounded-full p-3 shadow-lg">
         <IoIosSearch className="text-lg text-black" />
         <input
