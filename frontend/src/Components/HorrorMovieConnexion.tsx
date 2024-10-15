@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
-import Carousel from 'react-grid-carousel'
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { Link } from "react-router-dom";
 
 interface MovieData {
   id: number;
@@ -13,76 +14,62 @@ interface MovieData {
   genres: Array<{ id: number; name: string }>;
 }
 
+function HorrorMovieConnexion() {
+  const [Data, SetData] = useState<any>(null);
+  const [Loading, SetLoading] = useState<boolean>(true);
+  const apiKey = "dde133e5dad4ecdfe125539fc3db123d";
 
+  useEffect(() => {
+    const fetchHorrorMovieData = async () => {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=27`);
+        const data = await response.json();
+        SetData(data);
+        SetLoading(false);
+      } catch (error) {
+        console.log("Une erreur est intervenue lors de la récupération des données concernant les films d'horreur", error);
+        SetLoading(false);
+      }
+    };
+    fetchHorrorMovieData();
+  }, []);
 
-function HorroMovieConnexion() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [Data , SetData] = useState<any>(null)
-    const [Loading , SetLoading] = useState<boolean>(true)
-    const apiKey = "dde133e5dad4ecdfe125539fc3db123d"
+  function GoodName({ index, data }: { index: number; data: any }) {
+    const latinRegex = /^[A-Za-z0-9\s!@#$%^&*()_+={}\[\]|\\:;'",.<>/?`~\-]*$/;
+    const originalTitle = data[index]?.original_title; // Modifié ici
+    const title = data[index]?.title; // Modifié ici
 
-    useEffect(() => {
-        return(() => {
-            const fetchActionMovieData = async () => {
-                try {
-                    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=27`)
-                    const data = await response.json()
-                    SetData(data)
-                    console.log(data)
-                    SetLoading(false)
-                } catch (error) {
-                    console.log("Une erreur est intervenue lors de la récupérations des données concernant les films d'actions", error)
-                }
-            }
-            fetchActionMovieData()
-        })
-    }, [])
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function GoodName({ index, data }: { index: number; data: any }) {
-  const latinRegex = /^[A-Za-z0-9\s!@#$%^&*()_+={}\[\]|\\:;'",.<>/?`~\-]*$/
-  const originalTitle = data.results[index]?.original_title
-  const title = data.results[index]?.title
-    
-  if (!latinRegex.test(originalTitle)) {
-    return (
+    return !latinRegex.test(originalTitle) ? (
       <>
         <h1>{title}</h1>
         <h1>({originalTitle})</h1>
       </>
-    )
-  } else {
-    return <h1>{originalTitle}</h1>
+    ) : (
+      <h1>{originalTitle}</h1>
+    );
   }
-    }
-    
 
   return (
-    <div>
-  {Loading ? (
-    <h1>Chargement ...</h1>
-  ) : (
-    <div>
-        <div className="w-full">
-          <Carousel cols={4} row={1} gap={50} loop>
-            {Data.results.map((item: MovieData, index: number) => (
-              <Carousel.Item key={index} className="flex items-center justify-center">
-                <Link to={`/movieDetails/${item.id}`} >
-                  <div key={index}>
-                      <div className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
-                        <img src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt="MoviePoster" />
-                        <h1><GoodName index={index} data={Data}/></h1>
-                      </div>
-                    </div>
-                </Link>
-              </Carousel.Item>
-                ))}
-          </Carousel>
-        </div>
+    <div className="w-full">
+      <Swiper
+        navigation
+        pagination={{ clickable: true }}
+        spaceBetween={50}
+        slidesPerView={4}
+      >
+        {!Loading && Data?.results?.map((item: MovieData, index: number) => (
+          <SwiperSlide key={index}>
+            <Link to={`/movieDetails/${item.id}`}>
+              <div className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
+                <img src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt="Movie Poster" />
+                <h1><GoodName index={index} data={Data.results} /></h1>
+              </div>
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
-  )}
-    </div>
-  )
+  );
 }
 
-export default HorroMovieConnexion
+export default HorrorMovieConnexion;

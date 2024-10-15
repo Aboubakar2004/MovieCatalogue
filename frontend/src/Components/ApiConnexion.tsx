@@ -100,6 +100,7 @@ function ApiConnexion() {
             <h1 className="font-bold text-2xl">Horror Movie</h1>
             <HorrorMovieConnexion />
             <h1 className="font-bold text-2xl">Animation Movie</h1>
+            <h1></h1>
             <AnimationMovieConnexion />
             <h1 className="font-bold text-2xl">Comedy Movie</h1>
             <ComedyMovieConnexion />
