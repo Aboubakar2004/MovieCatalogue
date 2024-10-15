@@ -16,7 +16,6 @@ interface MovieData {
 
 function AnimationMovieConnexion() {
   const [Data, SetData] = useState<{ results: MovieData[] }>({ results: [] });
-  const [Loading, SetLoading] = useState<boolean>(true);
   const apiKey = "dde133e5dad4ecdfe125539fc3db123d";
 
   useEffect(() => {
@@ -25,7 +24,6 @@ function AnimationMovieConnexion() {
         const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=16`);
         const data = await response.json();
         SetData(data);
-        SetLoading(false);
       } catch (error) {
         console.log("Une erreur est intervenue lors de la récupération des données concernant les films d'actions", error);
       }
